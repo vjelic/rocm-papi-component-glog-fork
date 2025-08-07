@@ -1,0 +1,632 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "Glog.AI",
+          "organization": "Glog.AI",
+          "fullName": "Glog, Making software more secure",
+          "version": "1.0.0",
+          "semanticVersion": "1.0.0",
+          "informationUri": "https://www.glog.ai",
+          "rules": [
+            {
+              "id": "glog-789ea60e-7d5e-4914-8830-6e454a38dfb3",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `strncpy` function in C++ is a common source of vulnerabilities due to its potential to cause buffer overflow. This function copies a specified number of characters from one string to another. If the source string is longer than the specified length, `strncpy` does not append a null character to the destination string, which can lead to buffer overflow. This can be exploited to execute arbitrary code, cause a system crash, or expose sensitive information.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, consider using safer string handling functions that automatically handle the null-termination of strings, such as `strlcpy` or `strncpy_s`. If these are not available, ensure that you manually null-terminate your strings. Always validate the length of the string before copying to prevent buffer overflow.\n\n## Source Code Fix Recommendation\n\nReplace the `strncpy` function with a safer alternative. Here's an example of how you can do this:\n\n```cpp\nif (len < sizeof(name)) {\n    strncpy(name, gctxt->availEventDesc[index].name, len);\n    name[len] = '\\0';\n} else {\n    // Handle error: the destination buffer is too small\n}\n```\n\n## Library Dependencies\n\nThe `strncpy` function is part of the C Standard Library, so you need to include the `cstring` header:\n\n```cpp\n#include <cstring>\n```\n\n## References\n\n- [OWASP C++ Secure Coding Practices](https://cheatsheetseries.owasp.org/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)\n\nPlease note that the links provided are accessible to anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "tags": [
+                  "DS111237"
+                ]
+              }
+            },
+            {
+              "id": "glog-24bb1ad4-f46e-497c-9cc3-41df7912aa7a",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `strncpy` function in C++ is a common source of vulnerabilities due to its potential to cause buffer overflow errors. This function copies a specified number of characters from one string to another. If the source string is longer than the specified length, `strncpy` does not append a null character to the destination string, which can lead to buffer overflow. This can be exploited by attackers to execute arbitrary code or cause a denial of service.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, consider using safer string handling functions that automatically handle the null-termination of strings, such as `strlcpy` or `strncpy_s`. If these are not available, ensure that you manually null-terminate your strings.\n\n## Source Code Fix Recommendation\n\nHere is a recommended fix for the provided code:\n\n```cpp\nif (len < sizeof(name)) {\n    strncpy(name, gctxt->availEventDesc[index].description, len);\n    name[len] = '\\0';\n} else {\n    // Handle error: len is too large\n}\n```\n\nIn this code, we first check if `len` is less than the size of `name`. If it is, we proceed with the `strncpy` operation and then manually null-terminate `name`. If `len` is too large, we handle the error appropriately.\n\n## Library Dependencies\n\nThe `strncpy` function is part of the C standard library, so the only library dependency for the provided code is:\n\n```cpp\n#include <cstring>\n```\n\n## References\n\n- [OWASP C++ Secure Coding Practices](https://cheatsheetseries.owasp.org/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)\n\nPlease note that the links provided are accessible to anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "tags": [
+                  "DS111237"
+                ]
+              }
+            },
+            {
+              "id": "glog-86a1cc34-f653-48bf-87f0-d253b1c0f9ca",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `strncpy` function in C++ is considered unsafe because it can lead to buffer overflow vulnerabilities. This function copies a string from one location to another, up to a specified maximum number of characters. If the source string is longer than the specified maximum, the destination string will not be null-terminated, which can lead to buffer overflows.\n\nBuffer overflows can lead to various security issues, including arbitrary code execution, denial of service, and information disclosure.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, consider using safer string handling functions that ensure null-termination and prevent buffer overflows. In C++, this could be the `std::string` class or the `strlcpy` function (if available).\n\n## Source Code Fix Recommendation\n\nReplace the `strncpy` function with a safer alternative. Here's an example using `std::string`:\n\n```cpp\nstd::string disabled_reason = \"ERROR ROCM: No events exist\";\n_rocm_vector.cmp_info.disabled_reason = disabled_reason.substr(0, PAPI_MAX_STR_LEN - 1);\n```\n\n## Library Dependencies\n\nThe code example appears to be part of a larger program, so it's hard to say exactly what libraries it depends on. However, the `strncpy` function is part of the C standard library, so the program would at least need to include `<cstring>` or `<string.h>`.\n\n## OWASP and CWE Links\n\n- [OWASP C++ Secure Coding Practices](https://cheatsheetseries.owasp.org/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)\n\nPlease note that these links are subject to change and may not always be accessible. Always verify the validity of external resources."
+              },
+              "properties": {
+                "tags": [
+                  "DS111237"
+                ]
+              }
+            },
+            {
+              "id": "glog-b59a06fe-8327-4a44-9cf5-831a92be105a",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `strncpy` function in C++ is considered unsafe because it does not guarantee null-termination of the destination string when the source string length is greater than or equal to the size parameter. This can lead to buffer overflows, which can be exploited to execute arbitrary code, overwrite data, or cause a system crash.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, use safer string handling functions that ensure null-termination of the destination string. In C++, this can be achieved by using the `std::string` class or the `strlcpy` function if available.\n\n## Source Code Fix Recommendation\n\nReplace the `strncpy` function with `strlcpy` if available, or use the `std::string` class. Here is an example of how to fix the code using `std::string`:\n\n```cpp\nstd::string desc(info.metric.description);\nif (desc.size() > PAPI_2MAX_STR_LEN - 1) {\n    desc.resize(PAPI_2MAX_STR_LEN - 1);\n}\nctx->availEventDesc[index].description = desc;\n```\n\n## Library Dependencies\n\nThe code example requires the following libraries:\n\n- `cstring` or `string.h` for `strncpy`\n- `string` for `std::string`\n\n## References\n\n- [OWASP C++ Secure Coding Practices](https://cheatsheetseries.owasp.org/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html)\n- [CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer](https://cwe.mitre.org/data/definitions/119.html)\n\nPlease note that the availability of the `strlcpy` function depends on the platform and it may not be available on all platforms. The `std::string` class is part of the C++ Standard Library and is available on all platforms that support C++."
+              },
+              "properties": {
+                "tags": [
+                  "DS111237"
+                ]
+              }
+            },
+            {
+              "id": "glog-d87e953a-8b11-4788-a109-2d0c0533f8fe",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `strncpy` function in C++ is considered unsafe because it can lead to buffer overflow vulnerabilities. This function copies a string from one location to another, up to a specified maximum number of characters. If the source string is longer than the specified maximum, the destination buffer will overflow, potentially leading to arbitrary code execution, denial of service, or information disclosure vulnerabilities.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should use safer string handling functions that automatically handle buffer sizes, such as `strlcpy` or `strlcat`. If these functions are not available, you should manually ensure that the destination buffer is large enough to hold the source string plus a null terminator.\n\n## Source Code Fix Recommendation\n\nReplace the `strncpy` function with `strlcpy` or manually ensure that the buffer is large enough. Here's an example of how you might do this:\n\n```cpp\nif (strlen(\"The ROCM component does not support statically linking to libc.\") < PAPI_MAX_STR_LEN) {\n    strncpy(_rocm_vector.cmp_info.disabled_reason, \"The ROCM component does not support statically linking to libc.\", PAPI_MAX_STR_LEN);\n} else {\n    // Handle the error condition here\n}\n```\n\n## Library Dependencies\n\nThe code example requires the following library dependencies:\n\n- `cstring` (for `strncpy` and `strlen`)\n- `PAPI` (for `PAPI_MAX_STR_LEN`)\n\n## References\n\n- [OWASP C++ Secure Coding Practices](https://cheatsheetseries.owasp.org/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)\n\nPlease note that the links provided are active and accessible to anonymous users at the time of writing."
+              },
+              "properties": {
+                "tags": [
+                  "DS111237"
+                ]
+              }
+            },
+            {
+              "id": "glog-68faf7c5-0924-4bc7-ac0e-a19cdeddfa94",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `strncpy` function in C++ is considered unsafe because it can lead to buffer overflow vulnerabilities. This function does not guarantee that a null character will be appended at the end of the destination string, which can lead to out-of-bounds read or write operations. This can potentially allow an attacker to execute arbitrary code or cause a denial of service.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use safer string handling functions that ensure null-termination, such as `strlcpy` or `strncpy_s`. If these functions are not available, you should manually ensure null-termination of the string.\n\n## Source Code Fix Recommendation\n\nHere is a possible fix for the provided code snippet:\n\n```cpp\nstrncpy(_rocm_vector.cmp_info.disabled_reason,            \n                  \"A ROCM required function was not found in dynamic libs\", \n                  PAPI_MAX_STR_LEN - 1);\n_rocm_vector.cmp_info.disabled_reason[PAPI_MAX_STR_LEN - 1] = '\\0';\n```\n\nIn this fix, we ensure that the last character of the destination string is a null character, preventing potential buffer overflow.\n\n## Library Dependencies\n\nThe provided code snippet seems to be part of a larger codebase, and it's hard to determine all library dependencies without more context. However, it's clear that the code uses the `strncpy` function, which is part of the C standard library (`<cstring>` in C++).\n\n## References\n\n- [OWASP C++ Secure Coding Practices](https://cheatsheetseries.owasp.org/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)\n\nPlease note that the links provided are accessible to anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "tags": [
+                  "DS111237"
+                ]
+              }
+            }
+          ],
+          "language": "en-US",
+          "contents": [
+            "localizedData",
+            "nonLocalizedData"
+          ],
+          "isComprehensive": false
+        }
+      },
+      "language": "en-US",
+      "results": [
+        {
+          "ruleId": "glog-789ea60e-7d5e-4914-8830-6e454a38dfb3",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Detected Use of Prohibited C Function (strncpy)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "rocm/linux-rocm.c"
+                },
+                "region": {
+                  "startLine": 790,
+                  "startColumn": 8,
+                  "endLine": 790,
+                  "endColumn": 61,
+                  "charOffset": 33040,
+                  "charLength": 53,
+                  "snippet": {
+                    "text": "strncpy(name, gctxt->availEventDesc[index].name, len)",
+                    "rendered": {
+                      "text": "strncpy(name, gctxt->availEventDesc[index].name, len)",
+                      "markdown": "`strncpy(name, gctxt->availEventDesc[index].name, len)`"
+                    }
+                  },
+                  "sourceLanguage": "c"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "strncpy is dangerous, as if the source contains 'n' or more characters, it will not null terminate the destination."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "rocm/linux-rocm.c"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 33040,
+                        "charLength": 53
+                      },
+                      "insertedContent": {
+                        "text": "strcpy_s(name,  len,  gctxt->availEventDesc[index].name)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "strncpy is dangerous, as if the source contains 'n' or more characters, it will not null terminate the destination."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "rocm/linux-rocm.c"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 33040,
+                        "charLength": 53
+                      },
+                      "insertedContent": {
+                        "text": "strlcpy(name,  gctxt->availEventDesc[index].name,  len)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "Important",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.BannedFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-24bb1ad4-f46e-497c-9cc3-41df7912aa7a",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Detected Prohibited C Function (strncpy)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "rocm/linux-rocm.c"
+                },
+                "region": {
+                  "startLine": 811,
+                  "startColumn": 8,
+                  "endLine": 811,
+                  "endColumn": 68,
+                  "charOffset": 33747,
+                  "charLength": 60,
+                  "snippet": {
+                    "text": "strncpy(name, gctxt->availEventDesc[index].description, len)",
+                    "rendered": {
+                      "text": "strncpy(name, gctxt->availEventDesc[index].description, len)",
+                      "markdown": "`strncpy(name, gctxt->availEventDesc[index].description, len)`"
+                    }
+                  },
+                  "sourceLanguage": "c"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "strncpy is dangerous, as if the source contains 'n' or more characters, it will not null terminate the destination."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "rocm/linux-rocm.c"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 33747,
+                        "charLength": 60
+                      },
+                      "insertedContent": {
+                        "text": "strcpy_s(name,  len,  gctxt->availEventDesc[index].description)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "strncpy is dangerous, as if the source contains 'n' or more characters, it will not null terminate the destination."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "rocm/linux-rocm.c"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 33747,
+                        "charLength": 60
+                      },
+                      "insertedContent": {
+                        "text": "strlcpy(name,  gctxt->availEventDesc[index].description,  len)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "Important",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.BannedFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-86a1cc34-f653-48bf-87f0-d253b1c0f9ca",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Detected Use of Prohibited C Function (strncpy)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "rocm/linux-rocm.c"
+                },
+                "region": {
+                  "startLine": 387,
+                  "startColumn": 8,
+                  "endLine": 387,
+                  "endColumn": 103,
+                  "charOffset": 17242,
+                  "charLength": 95,
+                  "snippet": {
+                    "text": "strncpy(_rocm_vector.cmp_info.disabled_reason, \"ERROR ROCM: No events exist\", PAPI_MAX_STR_LEN)",
+                    "rendered": {
+                      "text": "strncpy(_rocm_vector.cmp_info.disabled_reason, \"ERROR ROCM: No events exist\", PAPI_MAX_STR_LEN)",
+                      "markdown": "`strncpy(_rocm_vector.cmp_info.disabled_reason, \"ERROR ROCM: No events exist\", PAPI_MAX_STR_LEN)`"
+                    }
+                  },
+                  "sourceLanguage": "c"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "strncpy is dangerous, as if the source contains 'n' or more characters, it will not null terminate the destination."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "rocm/linux-rocm.c"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 17242,
+                        "charLength": 95
+                      },
+                      "insertedContent": {
+                        "text": "strcpy_s(_rocm_vector.cmp_info.disabled_reason,  PAPI_MAX_STR_LEN,  \"ERROR ROCM: No events exist\")"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "strncpy is dangerous, as if the source contains 'n' or more characters, it will not null terminate the destination."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "rocm/linux-rocm.c"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 17242,
+                        "charLength": 95
+                      },
+                      "insertedContent": {
+                        "text": "strlcpy(_rocm_vector.cmp_info.disabled_reason,  \"ERROR ROCM: No events exist\",  PAPI_MAX_STR_LEN)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "Important",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.BannedFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-b59a06fe-8327-4a44-9cf5-831a92be105a",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Detected Use of Prohibited C Function (strncpy)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "rocm/linux-rocm.c"
+                },
+                "region": {
+                  "startLine": 269,
+                  "startColumn": 6,
+                  "endLine": 269,
+                  "endColumn": 97,
+                  "charOffset": 12492,
+                  "charLength": 91,
+                  "snippet": {
+                    "text": "strncpy(ctx->availEventDesc[index].description, info.metric.description, PAPI_2MAX_STR_LEN)",
+                    "rendered": {
+                      "text": "strncpy(ctx->availEventDesc[index].description, info.metric.description, PAPI_2MAX_STR_LEN)",
+                      "markdown": "`strncpy(ctx->availEventDesc[index].description, info.metric.description, PAPI_2MAX_STR_LEN)`"
+                    }
+                  },
+                  "sourceLanguage": "c"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "strncpy is dangerous, as if the source contains 'n' or more characters, it will not null terminate the destination."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "rocm/linux-rocm.c"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 12492,
+                        "charLength": 91
+                      },
+                      "insertedContent": {
+                        "text": "strcpy_s(ctx->availEventDesc[index].description,  PAPI_2MAX_STR_LEN,  info.metric.description)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "strncpy is dangerous, as if the source contains 'n' or more characters, it will not null terminate the destination."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "rocm/linux-rocm.c"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 12492,
+                        "charLength": 91
+                      },
+                      "insertedContent": {
+                        "text": "strlcpy(ctx->availEventDesc[index].description,  info.metric.description,  PAPI_2MAX_STR_LEN)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "Important",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.BannedFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-d87e953a-8b11-4788-a109-2d0c0533f8fe",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Detected Use of Prohibited C Function (strncpy)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "rocm/linux-rocm.c"
+                },
+                "region": {
+                  "startLine": 189,
+                  "startColumn": 8,
+                  "endLine": 189,
+                  "endColumn": 139,
+                  "charOffset": 9031,
+                  "charLength": 131,
+                  "snippet": {
+                    "text": "strncpy(_rocm_vector.cmp_info.disabled_reason, \"The ROCM component does not support statically linking to libc.\", PAPI_MAX_STR_LEN)",
+                    "rendered": {
+                      "text": "strncpy(_rocm_vector.cmp_info.disabled_reason, \"The ROCM component does not support statically linking to libc.\", PAPI_MAX_STR_LEN)",
+                      "markdown": "`strncpy(_rocm_vector.cmp_info.disabled_reason, \"The ROCM component does not support statically linking to libc.\", PAPI_MAX_STR_LEN)`"
+                    }
+                  },
+                  "sourceLanguage": "c"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "strncpy is dangerous, as if the source contains 'n' or more characters, it will not null terminate the destination."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "rocm/linux-rocm.c"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 9031,
+                        "charLength": 131
+                      },
+                      "insertedContent": {
+                        "text": "strcpy_s(_rocm_vector.cmp_info.disabled_reason,  PAPI_MAX_STR_LEN,  \"The ROCM component does not support statically linking to libc.\")"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "strncpy is dangerous, as if the source contains 'n' or more characters, it will not null terminate the destination."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "rocm/linux-rocm.c"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 9031,
+                        "charLength": 131
+                      },
+                      "insertedContent": {
+                        "text": "strlcpy(_rocm_vector.cmp_info.disabled_reason,  \"The ROCM component does not support statically linking to libc.\",  PAPI_MAX_STR_LEN)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "Important",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.BannedFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "glog-68faf7c5-0924-4bc7-ac0e-a19cdeddfa94",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Prohibited strncpy Function Found\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "rocm/linux-rocm.c"
+                },
+                "region": {
+                  "startLine": 62,
+                  "startColumn": 14,
+                  "endLine": 64,
+                  "endColumn": 35,
+                  "charOffset": 2593,
+                  "charLength": 173,
+                  "snippet": {
+                    "text": "strncpy(_rocm_vector.cmp_info.disabled_reason,            \\\n                  \"A ROCM required function was not found in dynamic libs\", \\\n                  PAPI_MAX_STR_LEN)",
+                    "rendered": {
+                      "text": "strncpy(_rocm_vector.cmp_info.disabled_reason,            \\\n                  \"A ROCM required function was not found in dynamic libs\", \\\n                  PAPI_MAX_STR_LEN)",
+                      "markdown": "`strncpy(_rocm_vector.cmp_info.disabled_reason,            \\\n                  \"A ROCM required function was not found in dynamic libs\", \\\n                  PAPI_MAX_STR_LEN)`"
+                    }
+                  },
+                  "sourceLanguage": "c"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "strncpy is dangerous, as if the source contains 'n' or more characters, it will not null terminate the destination."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "rocm/linux-rocm.c"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 2593,
+                        "charLength": 173
+                      },
+                      "insertedContent": {
+                        "text": "strcpy_s(_rocm_vector.cmp_info.disabled_reason,  \\\n                  PAPI_MAX_STR_LEN,             \\\n                  \"A ROCM required function was not found in dynamic libs\")"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "strncpy is dangerous, as if the source contains 'n' or more characters, it will not null terminate the destination."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "rocm/linux-rocm.c"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 2593,
+                        "charLength": 173
+                      },
+                      "insertedContent": {
+                        "text": "strlcpy(_rocm_vector.cmp_info.disabled_reason,             \\\n                  \"A ROCM required function was not found in dynamic libs\",  \\\n                  PAPI_MAX_STR_LEN)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "Important",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.BannedFunction"
+            ]
+          }
+        }
+      ],
+      "newlineSequences": [
+        "\r\n",
+        "\n"
+      ]
+    }
+  ]
+}
